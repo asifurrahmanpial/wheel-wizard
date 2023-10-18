@@ -1,0 +1,47 @@
+# Ignore Angular generated files
+/dist/
+/tmp/
+/out-tsc/
+/bazel-out/
+
+# Node.js dependencies
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE and editor specific files
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/
+.history/
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage/
+/libpeerconnection.log
+testem.log
+/typings/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Angular Configuration
+/angular.json
+
+# TypeScript Configuration
+/tsconfig.app.json
+/tsconfig.json
+/tsconfig.spec.json
+
+# Node Package Manager
+/package-lock.json
