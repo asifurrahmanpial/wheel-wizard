@@ -1,19 +1,6 @@
-<div id="map"></div>
-<div id="locate-icon" class="icon locate-icon" (click)="toggleMarker()">
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		version="1.1"
-		x="0"
-		y="0"
-		width="20"
-		height="20"
-		viewBox="0 0 561 561"
-		xml:space="preserve"
-	>
-		<path
-			d="M280.5 178.5c-56.1 0-102 45.9-102 102 0 56.1 45.9 102 102 102 56.1 0 102-45.9 102-102C382.5 224.4 336.6 178.5 280.5 178.5zM507.5 255C494.7 147.9 410.6 63.8 306 53.6V0h-51v53.6C147.9 63.8 63.8 147.9 53.6 255H0v51h53.6C66.3 413.1 150.5 497.3 255 507.5V561h-51v-53.5C413.1 494.7 497.3 410.6 507.5 306H561v-51H507.5zM280.5 459C181.1 459 102 380 102 280.5S181.1 102 280.5 102 459 181.1 459 280.5 380 459 280.5 459z"
-		/>
-	</svg>
+<!-- <div id="map"></div>
+<div id="locate-icon" class="" (click)="toggleMarker()">
+	<ion-icon name="locate-sharp"></ion-icon>
 </div>
 <div
 	id="start-stop-button"
@@ -32,9 +19,57 @@
 		Stop
 	</div>
 </ng-template>
+<div class="absolute fl my24 mx24 py24 px24 bg-gray-faint round" id="ride-info">
+	<form id="params">
+		<h4 class="txt-m txt-bold mb6">
+			Total Distance Covered: {{ totalDistance }} meters
+		</h4>
+		<h4 class="txt-m txt-bold mb6">
+			Total Ride Time: {{ calculateRideTime() }} seconds
+		</h4>
+	</form>
+</div> -->
 
-<!-- Display total distance and time -->
-<div id="ride-info" *ngIf="!tracking">
-	<p>Total Distance Covered: {{ totalDistance }} meters</p>
-	<p>Total Ride Time: {{ calculateRideTime() }} seconds</p>
+<div class="map-container">
+	<div id="map"></div>
+	<ion-icon
+		name="locate-sharp"
+		class="ion-icon-top-right"
+		(click)="toggleMarker()"
+	></ion-icon>
+</div>
+
+<div class="fixed bottom-0 w-full bg-white shadow-md p-4">
+	<div class="row">
+		<div class="col-md-4 col-lg-4 text-center">
+			<h4 class="text-xl font-semibold">
+				Total Distance: {{ totalDistance }} meters
+			</h4>
+		</div>
+		<div class="col-md-4 col-lg-4 text-center">
+			<h4 class="text-xl font-semibold">Total Cost: 5000</h4>
+		</div>
+		<div class="col-md-4 col-lg-4 text-center">
+			<h4 class="text-xl font-semibold">
+				Total Duration: {{ calculateRideTime() }} seconds
+			</h4>
+		</div>
+		<div class="col-12 text-center mt-2">
+			<button
+				class="btn btn-primary btn-lg rounded-circle"
+				(click)="toggleMarker()"
+				*ngIf="!tracking; else stopButton"
+			>
+				Start
+			</button>
+			<ng-template #stopButton>
+				<button
+					class="btn btn-danger btn-lg rounded-circle"
+					(click)="toggleMarker(); fitToBounds()"
+				>
+					Stop
+				</button>
+			</ng-template>
+		</div>
+	</div>
 </div>

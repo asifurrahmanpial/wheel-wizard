@@ -1,43 +1,62 @@
-#map {
-	width: 100%;
-	height: 100vh;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 0;
-}
+// #map {
+//     width: 100%;
+//     height: 100vh;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     z-index: 0;
+// }
 
-#locate-icon {
-	position: absolute;
-	top: 10px; /* Adjust the top and right values as needed */
-	right: 10px;
-	font-size: 40px; /* Adjust the icon size as needed */
-	color: #007aff; /* Icon color (adjust as needed) */
-	cursor: pointer;
-	z-index: 1;
-}
+// #locate-icon {
+//     position: absolute;
+//     top: 10px;
+//     right: 10px;
+//     font-size: 40px;
+//     color: #007aff;
+//     cursor: pointer;
+//     z-index: 1;
+// }
 
-#start-stop-button {
-	position: absolute;
-	top: 50%; /* Center the button vertically */
-	left: 50%; /* Center the button horizontally */
-	transform: translate(-50%, -50%);
-	font-size: 24px; /* Adjust the button size as needed */
-	background: #007aff; /* Button background color (adjust as needed) */
-	color: white; /* Button text color (adjust as needed) */
-	padding: 10px 15px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	z-index: 1;
-}
+// #start-stop-button {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     font-size: 24px;
+//     background: #007aff;
+//     color: white;
+//     padding: 10px 15px;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//     z-index: 1;
+// }
 
-#ride-info {
-	position: absolute;
-	top: 20px; /* Adjust the top position as needed */
-	left: 20px; /* Adjust the left position as needed */
-	background-color: rgba(255, 255, 255, 0.8);
-	padding: 10px;
-	border-radius: 5px;
-	z-index: 1000; /* Set a higher z-index to ensure it's displayed above the map */
+// #ride-info {
+//     position: absolute;
+//     top: 20px;
+//     left: 20px;
+//     background-color: rgba(255, 255, 255, 0.8);
+//     padding: 10px;
+//     border-radius: 5px;
+//     z-index: 1000;
+// }
+
+.map-container {
+	position: relative;
+
+	#map {
+		width: 100%;
+		height: 100vh;
+	}
+
+	.ion-icon-top-right {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		font-size: 30px;
+		color: #007aff;
+		cursor: pointer;
+		z-index: 1;
+	}
 }

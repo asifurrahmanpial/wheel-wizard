@@ -8,9 +8,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CameraComponent } from './pages/camera/camera.component';
 import { MapComponent } from './pages/map/map.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
-	declarations: [AppComponent, CameraComponent, MapComponent],
+	declarations: [AppComponent, CameraComponent, MapComponent, HomeComponent],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
