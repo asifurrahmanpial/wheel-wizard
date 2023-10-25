@@ -1,35 +1,3 @@
-<!-- <div id="map"></div>
-<div id="locate-icon" class="" (click)="toggleMarker()">
-	<ion-icon name="locate-sharp"></ion-icon>
-</div>
-<div
-	id="start-stop-button"
-	class="start-button"
-	(click)="toggleMarker()"
-	*ngIf="!tracking; else stopButton"
->
-	Start
-</div>
-<ng-template #stopButton>
-	<div
-		id="start-stop-button"
-		class="stop-button"
-		(click)="toggleMarker(); fitToBounds()"
-	>
-		Stop
-	</div>
-</ng-template>
-<div class="absolute fl my24 mx24 py24 px24 bg-gray-faint round" id="ride-info">
-	<form id="params">
-		<h4 class="txt-m txt-bold mb6">
-			Total Distance Covered: {{ totalDistance }} meters
-		</h4>
-		<h4 class="txt-m txt-bold mb6">
-			Total Ride Time: {{ calculateRideTime() }} seconds
-		</h4>
-	</form>
-</div> -->
-
 <div class="map-container">
 	<div id="map"></div>
 	<ion-icon
@@ -43,11 +11,11 @@
 	<div class="row">
 		<div class="col-md-4 col-lg-4 text-center">
 			<h4 class="text-xl font-semibold">
-				Total Distance: {{ totalDistance }} meters
+				Total Distance: {{ totalDistance }} km
 			</h4>
 		</div>
 		<div class="col-md-4 col-lg-4 text-center">
-			<h4 class="text-xl font-semibold">Total Cost: 5000</h4>
+			<h4 class="text-xl font-semibold">Total Cost: TK</h4>
 		</div>
 		<div class="col-md-4 col-lg-4 text-center">
 			<h4 class="text-xl font-semibold">
