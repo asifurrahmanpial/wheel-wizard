@@ -8,9 +8,11 @@ import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
+	private invalidatedTokens: Set<string> = new Set();
+
 	constructor(
 		private userService: UserService,
-		private jwtSerive: JwtService
+		private jwtService: JwtService
 	) {}
 
 	async hashPassword(password: string): Promise<string> {
@@ -33,7 +35,7 @@ export class AuthService {
 		return this.userService._getUserDetails(newUser);
 	}
 
-	async doesPassWordMatch(
+	async doesPasswordMatch(
 		password: string,
 		hashedPassword: string
 	): Promise<boolean> {
@@ -49,7 +51,7 @@ export class AuthService {
 		if (!doesUserExist) {
 			return null;
 		}
-		const doesPasswordMatch = await this.doesPassWordMatch(
+		const doesPasswordMatch = await this.doesPasswordMatch(
 			password,
 			user.password
 		);
@@ -69,7 +71,15 @@ export class AuthService {
 			return null;
 		}
 
-		const jwt = await this.jwtSerive.signAsync({ user });
-		return { token: jwt };
+		const token = await this.jwtService.signAsync({ user });
+		return { token };
+	}
+
+	async invalidateToken(token: string): Promise<void> {
+		this.invalidatedTokens.add(token);
+	}
+
+	async isTokenInvalid(token: string): Promise<boolean> {
+		return this.invalidatedTokens.has(token);
 	}
 }

@@ -9,9 +9,11 @@ import { AppComponent } from './app.component';
 import { CameraComponent } from './pages/camera/camera.component';
 import { MapComponent } from './pages/map/map.component';
 import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegistrationComponent } from './pages/registration/registration.component';
 
 @NgModule({
-	declarations: [AppComponent, CameraComponent, MapComponent, HomeComponent],
+	declarations: [AppComponent, CameraComponent, MapComponent, HomeComponent, LoginComponent, RegistrationComponent],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,

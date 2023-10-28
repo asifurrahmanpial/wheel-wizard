@@ -1,8 +1,16 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	HttpCode,
+	HttpStatus,
+	Post,
+	UseGuards
+} from '@nestjs/common';
 import { ExistingUserDTO } from 'src/user/DTOs/existing-user.dto';
 import { NewUserDTO } from 'src/user/DTOs/new-user.dto';
 import { UserDetails } from 'src/user/user-details.interface';
 import { AuthService } from './auth.service';
+import { JwtGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,5 +29,12 @@ export class AuthController {
 		@Body() user: Readonly<ExistingUserDTO>
 	): Promise<{ token: string } | null> {
 		return this.authService.login(user);
+	}
+
+	@Post('logout')
+	@UseGuards(JwtGuard)
+	@HttpCode(HttpStatus.OK)
+	async logout(): Promise<string> {
+		return 'Logged out successfully';
 	}
 }
