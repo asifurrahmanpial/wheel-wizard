@@ -31,7 +31,7 @@ export class MapComponent implements OnInit {
 		properties: {},
 		geometry: {
 			type: 'LineString',
-			coordinates: [] // Initialize with an empty array
+			coordinates: []
 		}
 	};
 

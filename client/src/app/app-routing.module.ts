@@ -7,15 +7,16 @@ import { MapComponent } from './pages/map/map.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { AuthService } from './services/auth.service';
+import { RidesComponent } from './pages/rides/rides.component';
 
 const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'home',
+		redirectTo: 'login',
 		pathMatch: 'full'
 	},
 	{
-		path: '',
+		path: 'home',
 		component: HomeComponent
 	},
 	{
@@ -38,8 +39,14 @@ const routes: Routes = [
 		path: 'profile',
 		component: ProfileComponent,
 		canActivate: [() => inject(AuthService).isLoggedIn()]
+	},
+	{
+		path: 'ride-history',
+		component: RidesComponent,
+		canActivate: [() => inject(AuthService).isLoggedIn()]
 	}
 ];
+
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule]

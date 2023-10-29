@@ -15,6 +15,12 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RidesComponent } from './pages/rides/rides.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
 	declarations: [
@@ -24,7 +30,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 		HomeComponent,
 		LoginComponent,
 		RegistrationComponent,
-		ProfileComponent
+		ProfileComponent,
+		RidesComponent
 	],
 	imports: [
 		BrowserModule,
@@ -35,6 +42,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 		CommonModule,
 		ReactiveFormsModule,
 		MatSnackBarModule,
+		MatToolbarModule,
+		MatSidenavModule,
+		MatButtonModule,
+		MatIconModule,
+		MatDividerModule,
 		IonicModule.forRoot()
 	],
 	providers: [],

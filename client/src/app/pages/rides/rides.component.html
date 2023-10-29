@@ -1,0 +1,27 @@
+<div class="ride-details-container">
+	<div id="map"></div>
+	<div class="bg-white rounded-lg shadow-lg p-4 space-y-4">
+		<h3 class="text-lg font-semibold">Ride Details</h3>
+
+		<div class="border-t border-gray-300"></div>
+
+		<div *ngFor="let ride of rides">
+			<div class="p-4">
+				<p>
+					<strong>Fare:</strong>
+					৳{{ ride.fare }}
+				</p>
+				<p>
+					<strong>Start Time:</strong>
+					{{ formatDateTime(ride.startTime) }}
+				</p>
+				<p>
+					<strong>End Time:</strong>
+					{{ formatDateTime(ride.endTime) }}
+				</p>
+			</div>
+
+			<div class="border-t border-gray-300"></div>
+		</div>
+	</div>
+</div>

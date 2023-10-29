@@ -1,46 +1,63 @@
-<div class="map-container">
+<div class="map-container relative h-screen">
 	<div id="map"></div>
-	<ion-icon
-		name="locate-sharp"
-		class="ion-icon-top-right"
-		(click)="toggleMarker()"
-	></ion-icon>
+	<div class="absolute top-4 right-4 z-10">
+		<button mat-icon-button (click)="toggleMarker()">
+			<mat-icon>my_location</mat-icon>
+		</button>
+	</div>
 </div>
 
-<div class="fixed bottom-0 w-full bg-white shadow-md p-4">
-	<div class="row">
-		<div class="col-md-4 col-lg-4 text-center">
+<div class="bottom-card fixed bottom-0">
+	<div class="flex flex-wrap justify-center items-center">
+		<div class="w-1/3 md:w-1/3 text-center border-r border-gray-300">
 			<h4 class="text-xl font-semibold">
-				Total Distance: {{ totalDistance }} km
+				<span class="text-center">
+					Distance (km)
+					<br />
+					{{ totalDistance }}
+				</span>
 			</h4>
 		</div>
-		<div class="col-md-4 col-lg-4 text-center">
-			<h4 class="text-xl font-semibold">Total Cost: TK</h4>
-		</div>
-		<div class="col-md-4 col-lg-4 text-center">
+		<div class="w-1/3 md:w-1/3 text-center border-r border-gray-300">
 			<h4 class="text-xl font-semibold">
-				Total Duration: {{ calculateRideTime() }} seconds
+				<span class="text-center">
+					Fare (Taka)
+					<br />
+					0
+				</span>
 			</h4>
 		</div>
-		<div class="col-12 text-center mt-2">
-			<button
-				class="btn btn-primary btn-lg rounded-circle"
-				(click)="toggleMarker()"
-				*ngIf="!tracking; else stopButton"
-			>
-				Start
-			</button>
-			<ng-template #stopButton>
-				<button
-					class="btn btn-danger btn-lg rounded-circle"
-					(click)="toggleMarker(); fitToBounds()"
-				>
-					Stop
-				</button>
-			</ng-template>
+		<div class="w-1/3 md:w-1/3 text-center">
+			<h4 class="text-xl font-semibold">
+				<span class="text-center">
+					Duration (min)
+					<br />
+					{{ calculateRideTime() }}
+				</span>
+			</h4>
 		</div>
-		<button class="btn btn-primary btn-lg rounded-circle" (click)="logOut()">
-			logout
+	</div>
+
+	<div class="border-t border-gray-300 mx-4 my-4"></div>
+	<div class="w-full text-center mt-2">
+		<button
+			mat-raised-button
+			color="primary"
+			class="rounded-full w-24 h-24 md:w-32 md:h-32"
+			(click)="toggleMarker()"
+			*ngIf="!tracking; else stopButton"
+		>
+			Start
 		</button>
+		<ng-template #stopButton>
+			<button
+				mat-raised-button
+				color="warn"
+				class="rounded-full w-24 h-24 md:w-32 md:h-32"
+				(click)="toggleMarker(); fitToBounds()"
+			>
+				Stop
+			</button>
+		</ng-template>
 	</div>
 </div>

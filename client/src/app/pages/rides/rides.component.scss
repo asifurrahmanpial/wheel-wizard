@@ -1,0 +1,32 @@
+#map {
+	height: 400px;
+}
+
+.ride-details-container {
+	@apply p-4 space-y-4;
+
+	.card-container {
+		@apply bg-white rounded-lg shadow-lg p-4 space-y-4;
+
+		h3 {
+			@apply text-lg font-semibold;
+		}
+
+		.separator {
+			@apply border-t border-gray-300 my-4;
+		}
+
+		.card-content {
+			@apply p-4;
+
+			p {
+				margin: 0.5rem 0;
+				padding: 0.5rem;
+
+				strong {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+}
