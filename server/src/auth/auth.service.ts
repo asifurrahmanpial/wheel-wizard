@@ -63,12 +63,12 @@ export class AuthService {
 
 	async login(
 		existingUser: ExistingUserDTO
-	): Promise<{ token: string } | null> {
+	): Promise<{ token: string } | string> {
 		const { email, password } = existingUser;
 		const user = await this.validateUser(email, password);
 
 		if (!user) {
-			return null;
+			return "User doesn't exist";
 		}
 
 		const token = await this.jwtService.signAsync({ user });

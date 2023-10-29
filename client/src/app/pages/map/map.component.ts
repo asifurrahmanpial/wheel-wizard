@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Geolocation, Position } from '@capacitor/geolocation';
-import * as mapboxgl from 'mapbox-gl';
 import * as turf from '@turf/turf';
+import * as mapboxgl from 'mapbox-gl';
+import { AuthService } from 'src/app/services/auth.service';
 import { MAPBOX_ACCESS_TOKEN, MAP_STYLE_URL } from '../../../config';
 
 @Component({
@@ -10,6 +12,8 @@ import { MAPBOX_ACCESS_TOKEN, MAP_STYLE_URL } from '../../../config';
 	styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
+	userID = this.authService.getCurrentUserId();
+
 	private map!: mapboxgl.Map;
 	private marker?: mapboxgl.Marker;
 	private markerVisible = false;
@@ -73,7 +77,15 @@ export class MapComponent implements OnInit {
 		}
 	};
 
-	constructor() {}
+	constructor(
+		private authService: AuthService,
+		private router: Router
+	) {}
+
+	logOut() {
+		this.authService.logOut();
+		this.router.navigateByUrl('/login');
+	}
 
 	async ngOnInit(): Promise<void> {
 		(mapboxgl as any).accessToken = MAPBOX_ACCESS_TOKEN;
