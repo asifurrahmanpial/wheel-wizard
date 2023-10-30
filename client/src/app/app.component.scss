@@ -9,14 +9,15 @@ mat-sidenav {
 	text-align: center;
 }
 
+mat-sidenav-container {
+	height: 100vh;
+}
+
 .content {
 	height: 100vh;
 	overflow: auto;
 }
 
-mat-sidenav-container {
-	height: 100vh;
-}
 
 .menu-button {
 	width: 100%;

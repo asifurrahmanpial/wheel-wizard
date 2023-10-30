@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import * as turf from '@turf/turf';
 import * as mapboxgl from 'mapbox-gl';
-import { AuthService } from 'src/app/services/auth.service';
 import { MAPBOX_ACCESS_TOKEN, MAP_STYLE_URL } from '../../../config';
 
 @Component({
@@ -12,8 +10,6 @@ import { MAPBOX_ACCESS_TOKEN, MAP_STYLE_URL } from '../../../config';
 	styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-	userID = this.authService.getCurrentUserId();
-
 	private map!: mapboxgl.Map;
 	private marker?: mapboxgl.Marker;
 	private markerVisible = false;
@@ -35,7 +31,7 @@ export class MapComponent implements OnInit {
 		}
 	};
 
-	// Property to store GeoJSON data for Polygon
+	// Geojson Polygon For Dhanmondi Service Area
 	public dhanmondiPolygonData: any = {
 		type: 'Feature',
 		properties: {},
@@ -58,13 +54,13 @@ export class MapComponent implements OnInit {
 		}
 	};
 
+	// Geojson Polygon For Gulshan Service Area
 	public gulshanPolygonData: any = {
 		type: 'Feature',
 		properties: {},
 		geometry: {
 			type: 'Polygon',
 			coordinates: [
-				// Your new layer coordinates
 				[
 					[90.41069757560575, 23.79680223178086],
 					[90.41591465744375, 23.799395564120303],
@@ -77,19 +73,9 @@ export class MapComponent implements OnInit {
 		}
 	};
 
-	constructor(
-		private authService: AuthService,
-		private router: Router
-	) {}
+	constructor() {}
 
-	logOut() {
-		this.authService.logOut();
-		this.router.navigateByUrl('/login');
-	}
-
-	async ngOnInit(): Promise<void> {
-		(mapboxgl as any).accessToken = MAPBOX_ACCESS_TOKEN;
-
+	ngOnInit() {
 		this.initializeMap();
 	}
 
@@ -105,6 +91,7 @@ export class MapComponent implements OnInit {
 	// Initialize the Mapbox map
 	private initializeMap() {
 		this.map = new mapboxgl.Map({
+			accessToken: MAPBOX_ACCESS_TOKEN,
 			container: 'map',
 			style: MAP_STYLE_URL,
 			center: [90.407293, 23.8103],
@@ -127,7 +114,7 @@ export class MapComponent implements OnInit {
 					'line-cap': 'round'
 				},
 				paint: {
-					'line-color': '#888', // Customize line color
+					'line-color': '#888',
 					'line-width': 8
 				}
 			});
