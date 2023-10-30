@@ -34,14 +34,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-# Angular Configuration
-/angular.json
-
-# TypeScript Configuration
-/tsconfig.app.json
-/tsconfig.json
-/tsconfig.spec.json
-
-# Node Package Manager
-/package-lock.json
