@@ -3,20 +3,19 @@ import { Injectable } from '@angular/core';
 @Injectable({
 	providedIn: 'root'
 })
-export class LocationService {
-	private storageKey = 'userLocation';
-
+export class GeolocationService {
 	constructor() {}
 
-	saveLocation(location: { latitude: number; longitude: number }) {
-		localStorage.setItem(this.storageKey, JSON.stringify(location));
-	}
-
-	getLocation(): { latitude: number; longitude: number } | null {
-		const storedLocation = localStorage.getItem(this.storageKey);
-		if (storedLocation) {
-			return JSON.parse(storedLocation);
-		}
-		return null;
+	getCurrentPosition(): Promise<any> {
+		return new Promise((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(
+				(resp) => {
+					resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+				},
+				(err) => {
+					reject(err);
+				}
+			);
+		});
 	}
 }

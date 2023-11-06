@@ -9,8 +9,13 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
+    implementation project(':capacitor-community-stripe')
+    implementation project(':capacitor-mlkit-barcode-scanning')
     implementation project(':capacitor-camera')
+    implementation project(':capacitor-device')
     implementation project(':capacitor-geolocation')
+    implementation project(':capacitor-preferences')
+    implementation project(':capawesome-capacitor-file-picker')
 
 }
 

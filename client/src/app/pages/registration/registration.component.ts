@@ -56,32 +56,38 @@ export class RegistrationComponent {
 	// }
 
 	register() {
-		console.log(this.registrationForm.value);
-		const { name, email, password } = this.registrationForm.getRawValue();
-		this.authService
-			.register(name || '', email || '', password || '')
-			.subscribe(
-				(response) => {
-					this.router.navigate(['/login']);
-					this.snackBar.open('Registered in successfully', 'Close', {
+		let { name, email, password } = this.registrationForm.getRawValue();
+		name = name ?? '';
+		email = email ?? '';
+		password = password ?? '';
+		const data = {
+			name: name,
+			email: email,
+			password: password
+		};
+		console.log(data);
+		this.authService.register(data).subscribe(
+			(response) => {
+				this.router.navigate(['/login']);
+				this.snackBar.open('Registered in successfully', 'Close', {
+					duration: 2000
+				});
+			},
+			(error) => {
+				if (error.status === 200) {
+					this.snackBar.open('User already exists', 'Close', {
 						duration: 2000
 					});
-				},
-				(error) => {
-					if (error.status === 200) {
-						this.snackBar.open('User already exists', 'Close', {
+				} else {
+					this.snackBar.open(
+						'An error occurred. Please try again later.',
+						'Close',
+						{
 							duration: 2000
-						});
-					} else {
-						this.snackBar.open(
-							'An error occurred. Please try again later.',
-							'Close',
-							{
-								duration: 2000
-							}
-						);
-					}
+						}
+					);
 				}
-			);
+			}
+		);
 	}
 }

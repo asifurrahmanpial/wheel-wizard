@@ -8,11 +8,15 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { AuthService } from './services/auth.service';
 import { RidesComponent } from './pages/rides/rides.component';
+import { QrScannerComponent } from './pages/qr-scanner/qr-scanner.component';
+import { BookRideComponent } from './pages/book-ride/book-ride.component';
+import { RideSummaryComponent } from './pages/ride-summary/ride-summary.component';
+import { StripeComponent } from './pages/stripe/stripe.component';
 
 const routes: Routes = [
 	{
 		path: '',
-		redirectTo: 'login',
+		redirectTo: 'map',
 		pathMatch: 'full'
 	},
 	{
@@ -21,29 +25,49 @@ const routes: Routes = [
 	},
 	{
 		path: 'camera',
-		component: CameraComponent,
-		canActivate: [() => inject(AuthService).isLoggedIn()]
+		component: CameraComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
 	},
 	{
 		path: 'map',
-		component: MapComponent,
-		canActivate: [() => inject(AuthService).isLoggedIn()]
+		component: MapComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
 	},
 	{ path: 'registration', component: RegistrationComponent },
 	{
 		path: 'login',
-		component: LoginComponent,
-		canActivate: [() => inject(AuthService).shouldLogIn()]
+		component: LoginComponent
+		// canActivate: [() => inject(AuthService).shouldLogIn()]
 	},
 	{
 		path: 'profile',
-		component: ProfileComponent,
-		canActivate: [() => inject(AuthService).isLoggedIn()]
+		component: ProfileComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
 	},
 	{
 		path: 'ride-history',
-		component: RidesComponent,
-		canActivate: [() => inject(AuthService).isLoggedIn()]
+		component: RidesComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
+	},
+	{
+		path: 'qr',
+		component: QrScannerComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
+	},
+	{
+		path: 'book',
+		component: BookRideComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
+	},
+	{
+		path: 'ride-summary',
+		component: RideSummaryComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
+	},
+	{
+		path: 'stripe',
+		component: StripeComponent
+		// canActivate: [() => inject(AuthService).isLoggedIn()]
 	}
 ];
 

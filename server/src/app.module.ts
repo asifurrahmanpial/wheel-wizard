@@ -6,6 +6,9 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RideModule } from './ride/ride.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { PaymentController } from './payment/payment.controller';
+import { PaymentService } from './payment/payment.service';
 
 @Module({
 	imports: [
@@ -16,9 +19,10 @@ import { RideModule } from './ride/ride.module';
 		MongooseModule.forRoot(process.env.DB_URI),
 		AuthModule,
 		UserModule,
-		RideModule
+		RideModule,
+		VehiclesModule
 	],
-	controllers: [AppController],
-	providers: [AppService]
+	controllers: [AppController, PaymentController],
+	providers: [AppService, PaymentService]
 })
 export class AppModule {}
