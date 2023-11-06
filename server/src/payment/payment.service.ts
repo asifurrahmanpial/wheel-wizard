@@ -4,57 +4,47 @@ import Stripe from 'stripe';
 @Injectable()
 export class PaymentService {
 	private stripe: Stripe;
-	private YOUR_DOMAIN = 'http://localhost:4200/';
 
 	constructor() {
-		this.stripe = new Stripe(process.env.STRIP_SECRET_KEY, {
-			apiVersion: '2020-08-27'
+		this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+			apiVersion: '2023-10-16'
 		});
 	}
 
-	async createCheckoutSession(price: number, rideData: any) {
-		const amountToCharge = price * 100;
-
+	async createPaymentSheet(data: any) {
 		try {
-			const session = await this.stripe.checkout.sessions.create({
-				line_items: [
-					{
-						price_data: {
-							unit_amount: amountToCharge,
-							currency: 'usd',
-							product_data: {
-								name:
-									'Ticket price for ' +
-									rideData.searchSeatQuantity +
-									' passenger',
-								description:
-									'Ride start location is ' +
-									rideData.startPlaceName +
-									' and end location is ' +
-									rideData.endPlaceName +
-									' on ' +
-									rideData.date +
-									' at ' +
-									rideData.time,
-								images: [
-									'https://blog-cdn.el.olx.com.pk/wp-content/uploads/2023/01/03172036/Car-Pool.jpg'
-								]
-							}
-						},
-						quantity: 1
-					}
-				],
-				mode: 'payment',
-				success_url: `${this.YOUR_DOMAIN}thankyou`,
-				cancel_url: `${this.YOUR_DOMAIN}`
+			const params = {
+				email: data.email,
+				name: data.name
+			};
+			const customer = await this.stripe.customers.create(params);
+
+			const ephemeralKey = await this.stripe.ephemeralKeys.create(
+				{ customer: customer.id },
+				{ apiVersion: '2023-10-16' }
+			);
+
+			// const paymentIntent = await this.stripe.paymentIntents.create({
+			// 	amount: parseInt(data.amount),
+			// 	currency: data.currency,
+			// 	customer: customer.id,
+			// 	automatic_payment_methods: {
+			// 		enabled: true
+			// 	}
+			// });
+
+			const paymentIntent = await this.stripe.paymentIntents.create({
+				amount: 1000, // amount in cents
+				currency: 'usd',
+				payment_method_types: ['card']
 			});
 
 			return {
-				status: 'success',
-				data: session.url
+				paymentIntent: paymentIntent.client_secret,
+				ephemeralKey: ephemeralKey.secret,
+				customer: customer.id
 			};
 		} catch (error) {
-			console.log(error);
 			throw new Error(error.message);
 		}
 	}

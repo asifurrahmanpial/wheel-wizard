@@ -5,9 +5,13 @@ import { PaymentService } from './payment.service';
 export class PaymentController {
 	constructor(private readonly paymentService: PaymentService) {}
 
-	@Post('/create-checkout-session')
-	async createCheckoutSession(@Body() body: any) {
-		const { price, rideData } = body;
-		return this.paymentService.createCheckoutSession(price, rideData);
+	@Post('/payment-sheet')
+	async createPaymentSheet(@Body() body: any) {
+		try {
+			return await this.paymentService.createPaymentSheet(body);
+		} catch (error) {
+			console.error(error); // Log the error
+			throw new Error(error.message);
+		}
 	}
 }
