@@ -1,16 +1,21 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 
-@Controller()
+@Controller('payment')
 export class PaymentController {
 	constructor(private readonly paymentService: PaymentService) {}
 
-	@Post('/payment-sheet')
-	async createPaymentSheet(@Body() body: any) {
+	@Post()
+	async createPaymentIntent(
+		@Body('email') email: string,
+		@Body('fare') fare: number
+	) {
 		try {
-			return await this.paymentService.createPaymentSheet(body);
+			// Convert fare to cents as Stripe works with the smallest currency unit
+			const amount = fare * 100;
+			return await this.paymentService.createPaymentIntent(email, amount);
 		} catch (error) {
-			console.error(error); // Log the error
+			console.error(error);
 			throw new Error(error.message);
 		}
 	}

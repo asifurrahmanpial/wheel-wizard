@@ -27,6 +27,8 @@ import { BookRideComponent } from './pages/book-ride/book-ride.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RideSummaryComponent } from './pages/ride-summary/ride-summary.component';
 import { StripeComponent } from './pages/stripe/stripe.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
 	declarations: [
@@ -58,6 +60,8 @@ import { StripeComponent } from './pages/stripe/stripe.component';
 		MatIconModule,
 		MatDividerModule,
 		MatCheckboxModule,
+		MatCardModule,
+		MatListModule,
 		IonicModule.forRoot(),
 		IonicStorageModule.forRoot()
 	],

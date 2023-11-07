@@ -1,29 +1,54 @@
-<div class="flex flex-col items-center">
-	<h1 class="text-3xl font-bold mt-8">Ride Summary</h1>
+<div
+	class="flex items-center justify-center min-h-screen bg-white px-4 sm:px-6 lg:px-8"
+>
+	<div class="flex flex-col items-center p-6 w-full max-w-2xl">
+		<h1 class="text-4xl font-bold mb-6 text-gray-700">Ride Summary</h1>
 
-	<div class="mt-4 p-4 bg-gray-100 rounded-lg">
-		<div class="flex justify-between mb-2">
-			<span class="font-semibold">Fare:</span>
-			<span class="font-semibold">{{ fare }}</span>
-		</div>
-		<div class="flex justify-between mb-2">
-			<span class="font-semibold">Duration:</span>
-			<span class="font-semibold">{{ duration }}</span>
-		</div>
-		<div class="flex justify-between mb-2">
-			<span class="font-semibold">Start Time:</span>
-			<span class="font-semibold">{{ startTime }}</span>
-		</div>
-		<div class="flex justify-between mb-2">
-			<span class="font-semibold">End Time:</span>
+		<mat-card-content class="w-full">
+			<mat-list>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">local_taxi</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">Fare:</span>
+					</div>
+					<span class="font-semibold text-gray-700">{{ fare }}</span>
+				</mat-list-item>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">timer</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">Duration:</span>
+					</div>
+					<span class="font-semibold text-gray-700">{{ duration }}</span>
+				</mat-list-item>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">schedule</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">Start Time:</span>
+					</div>
+					<span class="font-semibold text-gray-700">{{ startTime }}</span>
+				</mat-list-item>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">schedule</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">End Time:</span>
+					</div>
+					<span class="font-semibold text-gray-700">{{ endTime }}</span>
+				</mat-list-item>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">map</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">Distance:</span>
+					</div>
+					<span class="font-semibold text-gray-700">{{ distance }}</span>
+				</mat-list-item>
+			</mat-list>
+		</mat-card-content>
 
-			<span class="font-semibold">{{ endTime }}</span>
-		</div>
-
-		<div class="flex justify-between mb-2">
-			<span class="font-semibold">Distance:</span>
-
-			<span class="font-semibold">{{ distance }}</span>
-		</div>
+		<mat-card-actions class="w-full flex justify-center">
+			<button mat-raised-button color="primary" class="mt-4">
+				<mat-icon>payment</mat-icon>
+				Payment
+			</button>
+		</mat-card-actions>
 	</div>
 </div>

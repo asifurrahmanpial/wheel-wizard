@@ -11,5 +11,5 @@ export const environment = {
 		secretKey:
 			'sk_test_51O9ZJlEtvqqTQS33ExcAiFB3P6RZax0E6rjZN0BcEliL7VpicWRrB3GmPZxqB30eQRbpgPS11xO86xAkH9naCtMT00HeRaA8vP'
 	},
-	api: 'http://192.168.0.120:4000/'
+	api: 'http://127.0.0.1:3000/'
 };

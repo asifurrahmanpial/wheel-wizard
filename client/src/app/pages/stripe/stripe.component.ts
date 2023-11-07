@@ -1,4 +1,66 @@
-import { environment } from '../../../environments/environment';
+// import { environment } from '../../../environments/environment';
+// import { Component } from '@angular/core';
+// import { PaymentSheetEventsEnum, Stripe } from '@capacitor-community/stripe';
+// import { HttpClient } from '@angular/common/http';
+// import { first, lastValueFrom } from 'rxjs';
+
+// @Component({
+// 	selector: 'app-stripe',
+// 	templateUrl: './stripe.component.html',
+// 	styleUrls: ['./stripe.component.scss']
+// })
+// export class StripeComponent {
+// 	data: any = {
+// 		email: 'test@test.com',
+// 		fare: 5
+// 	};
+
+// 	constructor(private http: HttpClient) {
+// 		Stripe.initialize({
+// 			publishableKey: environment.stripe.publishableKey
+// 		});
+// 	}
+
+// 	httpPost(body: any) {
+// 		return this.http.post<any>(environment.api + 'payment', body).pipe(first());
+// 	}
+
+// 	async paymentSheet() {
+// 		try {
+// 			Stripe.addListener(PaymentSheetEventsEnum.Completed, () => {
+// 				console.log('PaymentSheetEventsEnum.Completed');
+// 			});
+
+// 			const data$ = this.httpPost(this.data);
+
+// 			const { client_secret } = await lastValueFrom(data$);
+
+// 			console.log('client_secret: ', client_secret);
+
+// 			await Stripe.createPaymentSheet({
+// 				paymentIntentClientSecret: client_secret,
+// 				merchantDisplayName: 'Technyks'
+// 			});
+
+// 			console.log('createPaymentSheet');
+// 			const result = await Stripe.presentPaymentSheet();
+// 			console.log('result: ', result);
+// 			if (result && result.paymentResult === PaymentSheetEventsEnum.Completed) {
+// 				this.splitAndJoin(client_secret);
+// 			}
+// 		} catch (e) {
+// 			console.log(e);
+// 		}
+// 	}
+
+// 	splitAndJoin(paymentIntent: any) {
+// 		const result = paymentIntent.split('_').slice(0, 2).join('_');
+// 		console.log(result);
+// 		return result;
+// 	}
+// }
+
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
 	ApplePayEventsEnum,
@@ -7,8 +69,9 @@ import {
 	PaymentSheetEventsEnum,
 	Stripe
 } from '@capacitor-community/stripe';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { first, lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
 @Component({
 	selector: 'app-stripe',
 	templateUrl: './stripe.component.html',
@@ -16,10 +79,10 @@ import { first, lastValueFrom } from 'rxjs';
 })
 export class StripeComponent {
 	data: any = {
-		name: 'Nikhil',
-		email: 'nykz786@gmail.com',
+		name: 'Asif',
+		email: 'one@one.com',
 		amount: 100,
-		currency: 'inr'
+		currency: 'usd'
 	};
 
 	constructor(private http: HttpClient) {
@@ -35,22 +98,12 @@ export class StripeComponent {
 	}
 
 	async paymentSheet() {
-		/*
-    With PaymentSheet, you can make payments in a single flow. 
-    As soon as the User presses the payment button, 
-    the payment is completed. (If you want user have some flow after that, 
-    please use paymentFlow method)
-    */
-
 		try {
 			// be able to get event of PaymentSheet
 			Stripe.addListener(PaymentSheetEventsEnum.Completed, () => {
 				console.log('PaymentSheetEventsEnum.Completed');
 			});
 
-			// const data = new HttpParams({
-			//   fromObject: this.data
-			// });
 			// Connect to your backend endpoint, and get every key.
 			const data$ = this.httpPost(this.data);
 
@@ -81,31 +134,10 @@ export class StripeComponent {
 	}
 
 	async paymentFlow() {
-		/* 
-    With PaymentFlow, you can make payments in two steps flow. 
-    When the user presses the submit button, 
-    the system only gets the card information, 
-    and puts it in a pending state. 
-    After that, when the program executes the confirmation method, 
-    the payment is executed. In most cases, 
-    it is used in a flow that is interrupted by a final confirmation screen.
-    */
-
 		// be able to get event of PaymentFlow
 		Stripe.addListener(PaymentFlowEventsEnum.Completed, () => {
 			console.log('PaymentFlowEventsEnum.Completed');
 		});
-
-		// const data = new HttpParams({
-		//   fromObject: this.data
-		// });
-
-		// Connect to your backend endpoint, and get every key.
-		// const data$ = this.http.post<{
-		//   paymentIntent: string;
-		//   ephemeralKey: string;
-		//   customer: string;
-		// }>(environment.api + 'payment-sheet', data).pipe(first());
 
 		const data$ = this.httpPost(this.data);
 
@@ -115,7 +147,6 @@ export class StripeComponent {
 		// Prepare PaymentFlow with CreatePaymentFlowOption.
 		await Stripe.createPaymentFlow({
 			paymentIntentClientSecret: paymentIntent,
-			// setupIntentClientSecret: setupIntent,
 			customerEphemeralKeySecret: ephemeralKey,
 			customerId: customer,
 			merchantDisplayName: 'Technyks'
@@ -134,54 +165,6 @@ export class StripeComponent {
 		}
 	}
 
-	async applePay() {
-		// Check to be able to use Apple Pay on device
-		const isAvailable = Stripe.isApplePayAvailable().catch(() => undefined);
-		if (isAvailable === undefined) {
-			// disable to use Google Pay
-			return;
-		}
-
-		// be able to get event of Apple Pay
-		Stripe.addListener(ApplePayEventsEnum.Completed, () => {
-			console.log('ApplePayEventsEnum.Completed');
-		});
-
-		// const data = new HttpParams({
-		//   fromObject: this.data
-		// });
-
-		// Connect to your backend endpoint, and get paymentIntent.
-		// const data$ = this.http.post<{
-		//   paymentIntent: string;
-		// }>(environment.api + 'payment-sheet', data).pipe(first());
-
-		const data$ = this.httpPost(this.data);
-
-		const { paymentIntent } = await lastValueFrom(data$);
-
-		// Prepare Apple Pay
-		await Stripe.createApplePay({
-			paymentIntentClientSecret: paymentIntent,
-			paymentSummaryItems: [
-				{
-					label: 'Technyks',
-					amount: 1099.0
-				}
-			],
-			merchantIdentifier: 'technyks',
-			countryCode: 'IN',
-			currency: 'INR'
-		});
-
-		// Present Apple Pay
-		const result = await Stripe.presentApplePay();
-		if (result.paymentResult === ApplePayEventsEnum.Completed) {
-			// Happy path
-			this.splitAndJoin(paymentIntent);
-		}
-	}
-
 	async googlePay() {
 		// Check to be able to use Google Pay on device
 		const isAvailable = Stripe.isGooglePayAvailable().catch(() => undefined);
@@ -194,15 +177,6 @@ export class StripeComponent {
 			console.log('GooglePayEventsEnum.Completed');
 		});
 
-		// const data = new HttpParams({
-		//   fromObject: this.data
-		// });
-
-		// Connect to your backend endpoint, and get paymentIntent.
-		// const data$= this.http.post<{
-		//   paymentIntent: string;
-		// }>(environment.api + 'payment-sheet', data).pipe(first());
-
 		const data$ = this.httpPost(this.data);
 
 		const { paymentIntent } = await lastValueFrom(data$);
@@ -214,13 +188,13 @@ export class StripeComponent {
 			// Web only. Google Pay on Android App doesn't need
 			paymentSummaryItems: [
 				{
-					label: 'Technyks',
-					amount: 1099.0
+					label: 'Wheez',
+					amount: 100
 				}
 			],
 			merchantIdentifier: 'merchant.com.getcapacitor.stripe',
-			countryCode: 'IN',
-			currency: 'INR'
+			countryCode: 'US',
+			currency: 'USD'
 		});
 
 		// Present Google Pay

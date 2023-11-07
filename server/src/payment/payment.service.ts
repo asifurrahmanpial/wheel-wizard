@@ -11,41 +11,18 @@ export class PaymentService {
 		});
 	}
 
-	async createPaymentSheet(data: any) {
-		try {
-			const params = {
-				email: data.email,
-				name: data.name
-			};
-			const customer = await this.stripe.customers.create(params);
+	async createPaymentIntent(email: string, amount: number) {
+		// Create a new customer
+		const customer = await this.stripe.customers.create({ email });
 
-			const ephemeralKey = await this.stripe.ephemeralKeys.create(
-				{ customer: customer.id },
-				{ apiVersion: '2023-10-16' }
-			);
+		// Create a new payment intent
+		const paymentIntent = await this.stripe.paymentIntents.create({
+			amount, // amount should be in cents
+			currency: 'usd',
+			customer: customer.id,
+			payment_method_types: ['card']
+		});
 
-			// const paymentIntent = await this.stripe.paymentIntents.create({
-			// 	amount: parseInt(data.amount),
-			// 	currency: data.currency,
-			// 	customer: customer.id,
-			// 	automatic_payment_methods: {
-			// 		enabled: true
-			// 	}
-			// });
-
-			const paymentIntent = await this.stripe.paymentIntents.create({
-				amount: 1000, // amount in cents
-				currency: 'usd',
-				payment_method_types: ['card']
-			});
-
-			return {
-				paymentIntent: paymentIntent.client_secret,
-				ephemeralKey: ephemeralKey.secret,
-				customer: customer.id
-			};
-		} catch (error) {
-			throw new Error(error.message);
-		}
+		return paymentIntent;
 	}
 }
