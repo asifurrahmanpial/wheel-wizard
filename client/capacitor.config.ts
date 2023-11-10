@@ -11,7 +11,7 @@ const config: CapacitorConfig = {
 	// }
 	appId: 'com.example.app',
 	appName: 'Wheel Wizard',
-	webDir: 'dist/client',
+	webDir: 'www',
 	bundledWebRuntime: false
 };
 

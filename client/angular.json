@@ -18,7 +18,8 @@
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
 						"aot": true,
-						"outputPath": "dist/client",
+						// "outputPath": "dist/client",
+						"outputPath": "www",
 						"index": "src/index.html",
 						"main": "src/main.ts",
 						"polyfills": ["zone.js"],
