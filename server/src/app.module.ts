@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
@@ -10,8 +10,6 @@ import { ProfileModule } from './profile/profile.module';
 import { RideModule } from './ride/ride.module';
 import { UserModule } from './user/user.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
-import { NestFactory } from '@nestjs/core';
-import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 @Module({
 	imports: [
@@ -29,24 +27,4 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 	controllers: [AppController, PaymentController],
 	providers: [AppService, PaymentService]
 })
-export class AppModule implements OnModuleInit {
-	async onModuleInit() {
-		await this.bootstrap();
-	}
-
-	async bootstrap() {
-		const app = await NestFactory.create(AppModule);
-
-		const corsOptions: CorsOptions = {
-			origin: '*', // Replace '*' with the desired origin or origins
-			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-			preflightContinue: false,
-			optionsSuccessStatus: 204,
-			credentials: true,
-			allowedHeaders: 'Content-Type, Accept, authorization'
-		};
-		app.enableCors(corsOptions);
-
-		await app.listen(process.env.PORT || 3000);
-	}
-}
+export class AppModule {}
