@@ -1,61 +1,87 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-	<div
-		class="flex flex-col items-center justify-center max-w-md mx-auto p-4 bg-gray-100 rounded-lg shadow-md"
-	>
-		<h1 class="text-2xl md:text-4xl font-bold mb-4">
+<div class="min-h-screen flex items-center justify-center bg-gray-50">
+	<div class="flex flex-col items-center justify-center max-w-md mx-auto p-6">
+		<h1
+			class="text-2xl md:text-4xl font-bold mb-4 text-gray-700 flex items-center"
+		>
+			<mat-icon class="mr-2">directions_bike</mat-icon>
 			Thank you for riding Wheel Wizards!
 		</h1>
 
-		<div class="mb-4" [formGroup]="Checklist">
-			<h2 class="text-xl md:text-2xl font-semibold">Before you ride:</h2>
+		<div class="mb-6" [formGroup]="Checklist">
+			<h2 class="text-xl md:text-2xl font-semibold text-gray-600">
+				Before you ride:
+			</h2>
 			<ul class="list-inside ml-4">
-				<mat-checkbox formControlName="pointOne">
-					Check the brakes and tires
-				</mat-checkbox>
-				<mat-checkbox formControlName="pointTwo">
-					Make sure the seat is adjusted to a comfortable height
-				</mat-checkbox>
-				<mat-checkbox formControlName="pointThree">Wear a helmet</mat-checkbox>
+				<li>
+					<mat-checkbox formControlName="pointOne">
+						Check the brakes and tires
+					</mat-checkbox>
+				</li>
+				<li>
+					<mat-checkbox formControlName="pointTwo">
+						Make sure the seat is adjusted to a comfortable height
+					</mat-checkbox>
+				</li>
+				<li>
+					<mat-checkbox formControlName="pointThree">
+						Wear a helmet
+					</mat-checkbox>
+				</li>
 			</ul>
 		</div>
 
-		<div class="mb-4">
+		<div class="mb-6 text-center">
+			<h2>Vehicle Details</h2>
+			<div *ngIf="vehicleData.vehicleType === 'cycle'" class="vehicle-iframe">
+				<iframe
+					src="https://lottie.host/?file=5f25f563-438f-474e-b2a4-86a78f78d56b/jI82dfx0xJ.lottie"
+				></iframe>
+			</div>
+			<div *ngIf="vehicleData.vehicleType === 'scooter'" class="vehicle-iframe">
+				<iframe
+					src="https://lottie.host/?file=b486797d-2f19-4aeb-bdb4-3122fe0fced8/RPFBx1PF9P.lottie"
+				></iframe>
+			</div>
 			<p>
-				<span class="font-semibold">Vehicle name:</span>
-				{{ vehicleData.title }}
+				<span class="font-semibold text-gray-600">Vehicle Name:</span>
+				<span class="ml-2 text-gray-600">{{ vehicleData.title }}</span>
 			</p>
 			<p>
-				<span class="font-semibold">Vehicle Type:</span>
-				{{ vehicleData.vehicleType }}
+				<span class="font-semibold text-gray-600">Vehicle Type:</span>
+				<span class="ml-2 text-gray-600">{{ vehicleData.vehicleType }}</span>
 			</p>
 			<p>
-				<span class="font-semibold">Service Area:</span>
-				{{ vehicleData.serviceZone }}
+				<span class="font-semibold text-gray-600">Service Area:</span>
+				<span class="ml-2 text-gray-600">{{ vehicleData.serviceZone }}</span>
 			</p>
 			<p>
-				<span class="font-semibold">Rate:</span>
-				৳{{ vehicleData.fare }}
+				<span class="font-semibold text-gray-600">Base Fare:</span>
+				<span class="ml-2 text-gray-600">৳{{ getBaseFare() }}</span>
+			</p>
+			<p>
+				<span class="font-semibold text-gray-600">Rate:</span>
+				<span class="ml-2 text-gray-600">৳{{ vehicleData.fare }}/min</span>
 			</p>
 		</div>
 
-		<div class="mb-4">
-			<p>Would you like to continue?</p>
-			<div class="space-x-4">
+		<div class="mb-6">
+			<p class="text-gray-700">Would you like to continue?</p>
+			<div class="space-x-4 flex">
 				<button
-					class="px-4 py-2 rounded-lg"
+					class="px-4 py-2 rounded-lg text-white flex items-center justify-center"
 					[class.bg-blue-500]="isChecklistComplete()"
-					[class.bg-gray-500]="!isChecklistComplete()"
-					[class.text-white]="isChecklistComplete()"
-					[class.text-white]="!isChecklistComplete()"
+					[class.bg-gray-300]="!isChecklistComplete()"
 					[disabled]="!isChecklistComplete()"
 					(click)="continueRide()"
 				>
+					<mat-icon class="mr-2">check_circle</mat-icon>
 					Yes
 				</button>
 				<button
-					class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+					class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 flex items-center justify-center"
 					routerLink="/map"
 				>
+					<mat-icon class="mr-2">cancel</mat-icon>
 					No
 				</button>
 			</div>

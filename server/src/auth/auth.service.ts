@@ -71,7 +71,10 @@ export class AuthService {
 			return "User doesn't exist";
 		}
 
-		const token = await this.jwtService.signAsync({ user });
+		// Include the user ID in the JWT token
+		const payload = { sub: user._id };
+		const token = await this.jwtService.signAsync(payload);
+
 		return { token };
 	}
 

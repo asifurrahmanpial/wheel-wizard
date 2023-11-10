@@ -18,7 +18,7 @@ export class PaymentService {
 		// Create a new payment intent
 		const paymentIntent = await this.stripe.paymentIntents.create({
 			amount, // amount should be in cents
-			currency: 'usd',
+			currency: 'bdt',
 			customer: customer.id,
 			payment_method_types: ['card']
 		});

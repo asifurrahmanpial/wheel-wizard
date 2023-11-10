@@ -17,4 +17,11 @@ export class VehicleService {
 		const newVehicle = new this.vehicleModel(vehicleData);
 		return newVehicle.save();
 	}
+
+	async updateVehicle(
+		id: string,
+		vehicleData: Partial<Vehicle>
+	): Promise<Vehicle> {
+		return this.vehicleModel.findByIdAndUpdate(id, vehicleData, { new: true });
+	}
 }

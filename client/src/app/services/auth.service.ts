@@ -1,29 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, UrlTree } from '@angular/router';
-import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { BehaviorSubject, Observable, map, switchMap, tap } from 'rxjs';
-import { UserData } from '../interfaces/auth';
-export const USER_STORAGE_KEY = 'APP_TOKEN';
-import { StorageService } from './storage.service';
-import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-import { Device } from '@capacitor/device';
 import { Preferences } from '@capacitor/preferences';
+import { JwtPayload, jwtDecode } from 'jwt-decode';
+import {
+	BehaviorSubject,
+	Observable,
+	catchError,
+	map,
+	switchMap,
+	tap,
+	throwError
+} from 'rxjs';
+import { UserData } from '../interfaces/auth';
+import { StorageService } from './storage.service';
 
-interface userData {
-	email: string;
-	password: string;
-}
+export const USER_STORAGE_KEY = 'APP_TOKEN';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
-	private baseUrl = 'http://localhost:4000/';
+	private baseUrl = 'http://192.168.0.120:4000/';
 	private user: BehaviorSubject<UserData | null | undefined> =
 		new BehaviorSubject<UserData | null | undefined>(undefined);
 
-	// for mobile
 	public isAuthenticated: BehaviorSubject<boolean> =
 		new BehaviorSubject<boolean>(false);
 	token = '';
@@ -31,23 +33,31 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private storageService: StorageService,
-		private router: Router
+		private router: Router,
+		@Inject(PLATFORM_ID) private platformId: Object
 	) {
 		this.loadUser();
-		this.isMobile();
-
-		// for mobile
-		this.loadToken();
 	}
 
-	private async isMobile(): Promise<boolean> {
-		// Use Capacitor Device API or any other method to determine device type
-		const deviceInfo = await Device.getInfo();
-		return deviceInfo.platform === 'android' || deviceInfo.platform === 'ios';
+	async setToken(token: string) {
+		if (isPlatformBrowser(this.platformId)) {
+			localStorage.setItem(USER_STORAGE_KEY, token);
+		} else {
+			await Preferences.set({ key: USER_STORAGE_KEY, value: token });
+		}
 	}
-	// For PC
-	loadUser() {
-		const token = localStorage.getItem(USER_STORAGE_KEY);
+
+	async getToken() {
+		if (isPlatformBrowser(this.platformId)) {
+			return localStorage.getItem(USER_STORAGE_KEY);
+		} else {
+			const ret = await Preferences.get({ key: USER_STORAGE_KEY });
+			return ret.value;
+		}
+	}
+
+	async loadUser() {
+		const token = await this.getToken();
 
 		if (token) {
 			const decoded = jwtDecode<JwtPayload>(token);
@@ -65,6 +75,7 @@ export class AuthService {
 		return this.http.post(`${this.baseUrl}auth/register`, userData).pipe(
 			switchMap((data: any) => {
 				return this.login(userData.email, userData.password);
+				// return data;
 			})
 		);
 	}
@@ -73,24 +84,48 @@ export class AuthService {
 		return this.http
 			.post(`${this.baseUrl}auth/login`, { email, password })
 			.pipe(
-				map((data: any) => {
-					localStorage.setItem(USER_STORAGE_KEY, data.token);
+				map(async (data: any) => {
+					await this.setToken(data.token);
+
+					// Log the token
+					console.log('Token:', data.token);
+
 					const decoded = jwtDecode<JwtPayload>(data.token);
+
+					// Log the decoded token
+					console.log('Decoded token:', decoded);
 
 					const userData: UserData = {
 						token: data.token,
 						id: decoded.sub!
 					};
+
+					// Log the user ID
+					console.log('User ID:', userData.id);
+
 					this.user.next(userData);
+
+					// Store user ID in the same way as the token
+					await Preferences.set({ key: 'userId', value: userData.id });
+
 					return userData;
 				})
 			);
 	}
 
-	logOut() {
-		localStorage.removeItem(USER_STORAGE_KEY);
+	getProfile(): Observable<any> {
+		return this.http.get(`${this.baseUrl}profile/${this.getCurrentUserId()}`);
+	}
+
+	currentUsername = new BehaviorSubject<string | null>(null);
+
+	async logOut() {
+		if (isPlatformBrowser(this.platformId)) {
+			localStorage.removeItem(USER_STORAGE_KEY);
+		} else {
+			await Preferences.remove({ key: USER_STORAGE_KEY });
+		}
 		this.user.next(null);
-		console.log('logged out');
 	}
 
 	getCurrentUser() {
@@ -100,9 +135,8 @@ export class AuthService {
 	getCurrentUserId() {
 		return this.user.getValue()?.id;
 	}
-
 	isLoggedIn(): Observable<boolean | UrlTree> {
-		const router = inject(Router);
+		const router = this.router;
 
 		return this.getCurrentUser().pipe(
 			map((user) => {
@@ -116,7 +150,7 @@ export class AuthService {
 	}
 
 	shouldLogIn(): Observable<boolean | UrlTree> {
-		const router = inject(Router);
+		const router = this.router;
 
 		return this.getCurrentUser().pipe(
 			map((user) => {
@@ -129,9 +163,10 @@ export class AuthService {
 		);
 	}
 
-	getRideHistory() {
+	async getRideHistory() {
+		const token = await this.getToken();
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${localStorage.getItem(USER_STORAGE_KEY)}`
+			Authorization: `Bearer ${token}`
 		});
 		return this.http.get(`${this.baseUrl}rides/history`, { headers }).pipe(
 			tap((data) => {
@@ -140,73 +175,45 @@ export class AuthService {
 		);
 	}
 
-	createRide() {
+	async createRide(rideDetails: any) {
+		const token = await this.getToken();
+		console.log('Token:', token); // Log the token
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${localStorage.getItem(USER_STORAGE_KEY)}`
+			'Authorization': `Bearer ${token}`,
+			'Content-Type': 'application/json'
 		});
-		return this.http.get(`${this.baseUrl}rides`, { headers }).pipe(
-			tap((data) => {
-				console.log(data);
-			})
-		);
+		return this.http
+			.post(`${this.baseUrl}rides`, rideDetails, { headers })
+			.pipe(
+				tap((data) => {
+					console.log(data);
+				})
+			)
+			.toPromise(); // Convert Observable to Promise
 	}
 
-	// For Mobile
-	async loadToken() {
-		const token = await this.storageService.get('token');
-		if (token) {
-			this.isAuthenticated.next(true);
-		} else {
-			this.isAuthenticated.next(false);
-		}
+	async getVehicles() {
+		return this.http
+			.get(`${this.baseUrl}vehicles`)
+			.pipe(tap((response) => console.log('getVehicles response:', response)))
+			.toPromise();
 	}
 
-	// async login(userData: userData) {
-	// 	if (!userData) return null;
-
-	// 	const isMobile = await this.isMobile();
-
-	// 	if (isMobile) {
-	// 		const options = {
-	// 			url: `${this.baseUrl}auth/login`,
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			data: JSON.stringify(userData)
-	// 		};
-
-	// 		try {
-	// 			const response: HttpResponse = await CapacitorHttp.post(options);
-	// 			const res = response.data;
-
-	// 			if (res && res.token) {
-	// 				this.storageService.set('token', res.token);
-	// 				this.isAuthenticated.next(true);
-	// 				this.router.navigateByUrl('/map', { replaceUrl: true });
-	// 				return;
-	// 			}
-	// 		} catch (e) {
-	// 			return null;
-	// 		}
-	// 	} else {
-	// 		return this.http.post(`${this.baseUrl}auth/login`, userData).pipe(
-	// 			map((data: any) => {
-	// 				localStorage.setItem(USER_STORAGE_KEY, data.token);
-	// 				const decoded = jwtDecode<JwtPayload>(data.token);
-
-	// 				const userData: UserData = {
-	// 					token: data.token,
-	// 					id: decoded.sub!
-	// 				};
-	// 				this.user.next(userData);
-	// 				return userData;
-	// 			})
-	// 		);
-	// 	}
-
-	// 	return null; // Default return statement
-	// }
+	async updateVehicles(
+		vehicleId: string,
+		updateData: { coordinates: [number, number] }
+	) {
+		console.log('Updating vehicle:', vehicleId);
+		console.log('Update data:', updateData);
+		const response = await this.http
+			.put(`${this.baseUrl}vehicles/${vehicleId}`, updateData)
+			.toPromise();
+		console.log('Server response:', response);
+		return response;
+	}
 }
+
+// !Coookies
 
 // import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import { Injectable, inject } from '@angular/core';

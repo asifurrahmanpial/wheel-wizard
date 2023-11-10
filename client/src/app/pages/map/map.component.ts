@@ -1,22 +1,29 @@
-import { AfterViewInit, Component, NgZone, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import {
+	AfterViewInit,
+	Component,
+	NgZone,
+	OnDestroy,
+	OnInit
+} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { supported } from '@mapbox/mapbox-gl-supported';
 import * as turf from '@turf/turf';
-import * as mapboxgl from 'mapbox-gl';
-import { GeolocationService } from 'src/app/services/location.service';
-import { environment } from '../../../environments/environment';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { QrScannerService } from 'src/app/services/qrScannerService.service';
 import html2canvas from 'html2canvas';
-import { ParamMap } from '@angular/router';
+import * as mapboxgl from 'mapbox-gl';
+import { AuthService } from 'src/app/services/auth.service';
+import { GeolocationService } from 'src/app/services/location.service';
+import { QrScannerService } from 'src/app/services/qrScannerService.service';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-map',
 	templateUrl: './map.component.html',
 	styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit, OnInit {
+export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 	private map!: mapboxgl.Map;
 	private flyToMarker!: mapboxgl.Marker;
 	style = environment.mapbox.MAP_STYLE_URL;
@@ -37,7 +44,10 @@ export class MapComponent implements AfterViewInit, OnInit {
 	serviceZoneCheckInterval: any;
 	private features: GeoJSON.Feature[] = [];
 	currentLocation!: mapboxgl.LngLatLike;
+	email!: string;
 	private vehicleLayersAndSources: string[] = [];
+	isStopButtonDisabled = false;
+	vehicleId!: string;
 
 	constructor(
 		private geolocationService: GeolocationService,
@@ -45,11 +55,14 @@ export class MapComponent implements AfterViewInit, OnInit {
 		private snackBar: MatSnackBar,
 		private qrScannerService: QrScannerService,
 		private zone: NgZone,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private authService: AuthService
 	) {
 		const navigation = this.router.getCurrentNavigation();
 		if (navigation && navigation.extras.state) {
 			this.hasBookedRide = navigation.extras.state['hasBookedRide'];
+			this.vehicleData = navigation.extras.state['vehicleData'];
+			console.log('Vehicle Data:', this.vehicleData); // Retrieve vehicleData from the navigation state
 		}
 	}
 
@@ -69,6 +82,10 @@ export class MapComponent implements AfterViewInit, OnInit {
 			if (state && state.vehicleData) {
 				this.vehicleData = state.vehicleData;
 				this.vehicleType = this.vehicleData.vehicleType;
+			}
+			if (state && state.email) {
+				this.email = state.email; // Retrieve the email from state
+				// You can use the email as needed in the map component
 			}
 		});
 	}
@@ -192,6 +209,79 @@ export class MapComponent implements AfterViewInit, OnInit {
 		return features.length > 0;
 	}
 
+	// async getUserLocation(): Promise<Position | undefined> {
+	// 	this.vehicleLayersAndSources.forEach((id) => {
+	// 		if (this.map.getLayer(id)) {
+	// 			this.map.removeLayer(id);
+	// 		}
+	// 		if (this.map.getSource(id)) {
+	// 			this.map.removeSource(id);
+	// 		}
+	// 	});
+	// 	this.vehicleLayersAndSources = [];
+	// 	if (!this.map) {
+	// 		await this.initializeMapAndLayers();
+	// 	}
+
+	// 	try {
+	// 		const position = await Geolocation.getCurrentPosition({
+	// 			enableHighAccuracy: true
+	// 		});
+
+	// 		if (position) {
+	// 			const { longitude, latitude } = position.coords;
+	// 			const lngLat: mapboxgl.LngLatLike = [longitude, latitude];
+
+	// 			console.log('User location:', position);
+	// 			this.isUserTracked = true;
+	// 			this.flyToPosition(lngLat, true);
+	// 			if (!this.isTracking) {
+	// 				const nearestVehicleData = this.findVehiclesWithinRadius(lngLat, [
+	// 					{
+	// 						coordinates: [90.3602676, 23.7338588],
+	// 						title: 'Scooter Two',
+	// 						vehicleType: 'scooter',
+	// 						serviceZone: 'Dhanmondi'
+	// 					},
+	// 					{
+	// 						coordinates: [90.36270595295844, 23.732303975895746],
+	// 						title: 'Cycle One',
+	// 						vehicleType: 'cycle',
+	// 						serviceZone: 'Dhanmondi'
+	// 					},
+	// 					{
+	// 						coordinates: [90.415, 23.798],
+	// 						title: 'Scooter One',
+	// 						vehicleType: 'scooter',
+	// 						serviceZone: 'Gulshan 2'
+	// 					},
+	// 					{
+	// 						coordinates: [90.41940936417484, 23.792966936767243],
+	// 						title: 'Scooter Three',
+	// 						vehicleType: 'scooter',
+	// 						serviceZone: 'Gulshan 2'
+	// 					}
+	// 				]);
+	// 				if (nearestVehicleData && nearestVehicleData.length > 0) {
+	// 					console.log('Nearby vehicles:', nearestVehicleData);
+	// 					nearestVehicleData.forEach((vehicle) => {
+	// 						this.addVehicleMarker(vehicle);
+	// 					});
+	// 				} else {
+	// 					console.log('No vehicles found within the specified radius.');
+	// 				}
+	// 			}
+	// 		} else {
+	// 			console.error('Geolocation.getCurrentPosition returned no position.');
+	// 		}
+
+	// 		return position;
+	// 	} catch (error) {
+	// 		console.error('Error getting user location:', error);
+	// 		return undefined;
+	// 	}
+	// }
+
 	async getUserLocation(): Promise<Position | undefined> {
 		this.vehicleLayersAndSources.forEach((id) => {
 			if (this.map.getLayer(id)) {
@@ -219,40 +309,22 @@ export class MapComponent implements AfterViewInit, OnInit {
 				this.isUserTracked = true;
 				this.flyToPosition(lngLat, true);
 				if (!this.isTracking) {
-					const nearestVehicleData = this.findVehiclesWithinRadius(lngLat, [
-						{
-							coordinates: [90.3602676, 23.7338588],
-							title: 'Scooter Two',
-							vehicleType: 'scooter',
-							serviceZone: 'Dhanmondi'
-						},
-						{
-							coordinates: [90.36270595295844, 23.732303975895746],
-							title: 'Cycle One',
-							vehicleType: 'cycle',
-							serviceZone: 'Dhanmondi'
-						},
-						{
-							coordinates: [90.415, 23.798],
-							title: 'Scooter One',
-							vehicleType: 'scooter',
-							serviceZone: 'Gulshan 2'
-						},
-						{
-							coordinates: [90.41940936417484, 23.792966936767243],
-							title: 'Scooter Three',
-							vehicleType: 'scooter',
-							serviceZone: 'Gulshan 2'
+					this.authService.getVehicles().then((vehicles: any) => {
+						if (vehicles) {
+							const nearestVehicleData = this.findVehiclesWithinRadius(
+								lngLat,
+								vehicles
+							);
+							if (nearestVehicleData && nearestVehicleData.length > 0) {
+								console.log('Nearby vehicles:', nearestVehicleData);
+								nearestVehicleData.forEach((vehicle) => {
+									this.addVehicleMarker(vehicle);
+								});
+							} else {
+								console.log('No vehicles found within the specified radius.');
+							}
 						}
-					]);
-					if (nearestVehicleData && nearestVehicleData.length > 0) {
-						console.log('Nearby vehicles:', nearestVehicleData);
-						nearestVehicleData.forEach((vehicle) => {
-							this.addVehicleMarker(vehicle);
-						});
-					} else {
-						console.log('No vehicles found within the specified radius.');
-					}
+					});
 				}
 			} else {
 				console.error('Geolocation.getCurrentPosition returned no position.');
@@ -268,25 +340,31 @@ export class MapComponent implements AfterViewInit, OnInit {
 	findVehiclesWithinRadius(
 		userLocation: [number, number],
 		vehicleData: {
+			_id: string;
 			coordinates: [number, number];
 			title: string;
 			vehicleType: 'scooter' | 'cycle';
 			serviceZone: 'Dhanmondi' | 'Gulshan 2';
+			price: number;
 		}[],
 		radius: number = 1
 	): {
+		_id: string;
 		coordinates: [number, number];
 		title: string;
 		vehicleType: 'scooter' | 'cycle';
 		serviceZone: 'Dhanmondi' | 'Gulshan 2';
+		price: number;
 	}[] {
 		const userPoint = turf.point(userLocation);
 		const vehiclePoints = turf.featureCollection(
 			vehicleData.map((data) => {
 				return turf.point(data.coordinates, {
+					_id: data._id,
 					title: data.title,
 					vehicleType: data.vehicleType,
-					serviceZone: data.serviceZone
+					serviceZone: data.serviceZone,
+					price: data.price
 				});
 			})
 		);
@@ -299,19 +377,23 @@ export class MapComponent implements AfterViewInit, OnInit {
 		return nearbyVehicles.map((vehicle) => {
 			const coordinates = vehicle.geometry.coordinates;
 			return {
+				_id: vehicle.properties._id,
 				coordinates: [coordinates[0], coordinates[1]],
 				title: vehicle.properties['title'],
 				vehicleType: vehicle.properties['vehicleType'],
-				serviceZone: vehicle.properties['serviceZone']
+				serviceZone: vehicle.properties['serviceZone'],
+				price: vehicle.properties['price']
 			};
 		});
 	}
 
 	addVehicleMarker(vehicleData: {
+		_id: string;
 		coordinates: [number, number];
 		title: string;
 		vehicleType: 'scooter' | 'cycle';
 		serviceZone: 'Dhanmondi' | 'Gulshan 2';
+		price: number;
 	}) {
 		const sourceId = `Vehicles-${vehicleData.title}`;
 		const imageId = vehicleData.vehicleType;
@@ -332,21 +414,6 @@ export class MapComponent implements AfterViewInit, OnInit {
 			);
 		}
 
-		let fare;
-		if (vehicleData.vehicleType === 'scooter') {
-			fare = 20;
-		} else if (vehicleData.vehicleType === 'cycle') {
-			fare = 10;
-		}
-
-		if (this.map.getLayer(layerId)) {
-			this.map.removeLayer(layerId);
-		}
-
-		if (this.map.getSource(sourceId)) {
-			this.map.removeSource(sourceId);
-		}
-
 		this.map.addSource(sourceId, {
 			type: 'geojson',
 			data: {
@@ -359,10 +426,11 @@ export class MapComponent implements AfterViewInit, OnInit {
 							coordinates: vehicleData.coordinates
 						},
 						properties: {
+							_id: vehicleData._id,
 							title: vehicleData.title,
 							vehicleType: vehicleData.vehicleType,
 							serviceZone: vehicleData.serviceZone,
-							fare: fare
+							fare: vehicleData.price
 						}
 					}
 				]
@@ -420,8 +488,10 @@ export class MapComponent implements AfterViewInit, OnInit {
 					const fare = e.features[0].properties?.['fare'];
 					const vehicleType = e.features[0].properties?.['vehicleType'];
 					const serviceZone = e.features[0].properties?.['serviceZone'];
+					const vehicleId = e.features[0].properties?.['_id']; // Get the vehicleId from the clicked marker
 
 					const vehicleData = {
+						vehicleId,
 						coordinates,
 						title,
 						vehicleType,
@@ -533,59 +603,73 @@ export class MapComponent implements AfterViewInit, OnInit {
 		this.isTracking = false;
 		this.endTime = new Date();
 		this.onLineStringChange();
+
 		if (this.watchID) {
-			Geolocation.clearWatch({ id: this.watchID });
-			this.watchID = null;
+			if (this.isStopButtonDisabled) {
+				this.snackBar.open('Please...', '', {
+					duration: 3000,
+					verticalPosition: 'top'
+				});
+			} else {
+				Geolocation.clearWatch({ id: this.watchID });
+				this.watchID = null;
 
-			const coordinates: [number, number][] =
-				this.realtimeLineString.geometry.coordinates;
-			const initialLngLat: [number, number] = [
-				coordinates[0][0],
-				coordinates[0][1]
-			];
-			const bounds = coordinates.reduce(
-				(bounds: mapboxgl.LngLatBounds, coord: [number, number]) => {
-					return bounds.extend(coord);
-				},
-				new mapboxgl.LngLatBounds(initialLngLat, initialLngLat)
-			);
+				const coordinates: [number, number][] =
+					this.realtimeLineString.geometry.coordinates;
+				const initialLngLat: [number, number] = [
+					coordinates[0][0],
+					coordinates[0][1]
+				];
+				const bounds = coordinates.reduce(
+					(bounds: mapboxgl.LngLatBounds, coord: [number, number]) => {
+						return bounds.extend(coord);
+					},
+					new mapboxgl.LngLatBounds(initialLngLat, initialLngLat)
+				);
 
-			this.map.fitBounds(bounds, { padding: 55 });
+				this.map.fitBounds(bounds, { padding: 55 });
 
-			const duration = this.endTime.getTime() - this.startTime.getTime();
+				const vehicleId = this.vehicleData.vehicleId;
+				const updateData = { coordinates: initialLngLat };
+				console.log('Updated Data MAPBOX', updateData); // Console the vehicle ID at the stop
+				this.authService
+					.updateVehicles(vehicleId, updateData)
+					.then((response) => {
+						console.log('Vehicle updated:', response);
+					})
+					.catch((error) => {
+						console.error('Error updating vehicle:', error);
+					});
 
-			// Create the ride details object
-			const rideDetails = {
-				geojson: this.realtimeLineString,
-				fare: this.fare,
-				startTime: this.startTime,
-				endTime: this.endTime,
-				duration: duration,
-				distance: this.distance
-			};
+				const duration = this.endTime.getTime() - this.startTime.getTime();
 
-			console.log('Ride details:', rideDetails);
-			this.router.navigate(['/ride-summary'], { state: { data: rideDetails } });
+				// Create the ride details object
+				const rideDetails = {
+					geojson: this.realtimeLineString,
+					fare: this.fare,
+					startTime: this.startTime,
+					endTime: this.endTime,
+					duration: duration,
+					distance: this.distance
+				};
 
-			// this.sendRideDetails(rideDetails);
+				console.log('Ride details:', rideDetails);
+				console.log('Email:', this.email); // Console log the email
+				this.router.navigate(['/ride-summary'], {
+					state: { email: this.email, data: rideDetails }
+				});
+
+				// Use authService to send ride details
+				try {
+					const response = this.authService.createRide(rideDetails);
+					console.log('Response:', response);
+				} catch (error) {
+					console.error('Error:', error);
+				}
+			}
 		}
+		clearInterval(this.serviceZoneCheckInterval);
 	}
-
-	// async sendRideDetails(rideDetails: any) {
-	// 	try {
-	// 		const response = await fetch('/ride-details', {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify(rideDetails)
-	// 		});
-
-	// 		console.log('Response:', response);
-	// 	} catch (error) {
-	// 		console.error('Error:', error);
-	// 	}
-	// }
 
 	updateRealTimeInfo() {
 		if (this.isTracking) {
@@ -601,6 +685,8 @@ export class MapComponent implements AfterViewInit, OnInit {
 	}
 
 	startTracking() {
+		const vehicleId = this.vehicleData.vehicleId;
+		console.log('Vehicle ID at start:', vehicleId); // Console the vehicle ID at the start
 		this.removeAllVehicles();
 		this.startTime = new Date();
 		this.isTracking = true;
@@ -617,15 +703,18 @@ export class MapComponent implements AfterViewInit, OnInit {
 			const isInServiceZone = await this.isUserInServiceZone(
 				this.currentLocation
 			);
-			if (!isInServiceZone && wasInServiceZone) {
+			if (isInServiceZone) {
+				this.isStopButtonDisabled = false;
+			} else if (!isInServiceZone && wasInServiceZone) {
 				this.snackBar.open('⚠️ You are leaving the service zone!', '', {
-					duration: 3000
+					duration: 3000,
+					verticalPosition: 'top'
 				});
+				this.isStopButtonDisabled = true;
 			}
 			wasInServiceZone = isInServiceZone;
 		}, 5000);
 	}
-
 	removeAllVehicles() {
 		for (let i = 0; i < this.vehicleLayersAndSources.length; i += 2) {
 			const layerId = this.vehicleLayersAndSources[i];
@@ -655,9 +744,9 @@ export class MapComponent implements AfterViewInit, OnInit {
 		this.zone.run(() => {
 			const durationInMinutes = timeInSeconds / 60;
 			if (this.vehicleType === 'cycle') {
-				this.fare = durationInMinutes * 10;
+				this.fare = Math.round(100 + durationInMinutes * 10);
 			} else if (this.vehicleType === 'scooter') {
-				this.fare = durationInMinutes * 20;
+				this.fare = Math.round(100 + durationInMinutes * 20);
 			}
 		});
 	}
@@ -725,6 +814,13 @@ export class MapComponent implements AfterViewInit, OnInit {
 	private removeFlyToMarker() {
 		if (this.flyToMarker) {
 			this.flyToMarker.remove();
+		}
+	}
+
+	ngOnDestroy() {
+		// Remove the map when the component is destroyed
+		if (this.map) {
+			this.map.remove();
 		}
 	}
 }

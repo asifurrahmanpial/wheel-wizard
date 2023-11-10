@@ -1,27 +1,55 @@
-<div class="ride-details-container">
-	<!-- <div id="map"></div> -->
-	<div class="bg-white rounded-lg shadow-lg p-4 space-y-4">
-		<h3 class="text-lg font-semibold">Ride Details</h3>
-
-		<div class="border-t border-gray-300"></div>
-
-		<div *ngFor="let ride of rides">
-			<div class="p-4">
-				<p>
-					<strong>Fare:</strong>
-					৳{{ ride.fare }}
-				</p>
-				<p>
-					<strong>Start Time:</strong>
-					{{ formatDateTime(ride.startTime) }}
-				</p>
-				<p>
-					<strong>End Time:</strong>
-					{{ formatDateTime(ride.endTime) }}
-				</p>
-			</div>
+<div class="ride-details-container mx-auto max-w-md bg-gray-50">
+	<div class="p-6 mt-8 space-y-4">
+		<div *ngIf="rides.length; else noHistory">
+			<h3 class="text-lg font-semibold text-gray-700">Ride Details</h3>
 
 			<div class="border-t border-gray-300"></div>
+			<div *ngFor="let ride of rides">
+				<div class="p-4 space-y-2">
+					<p class="text-gray-600">
+						<strong class="text-gray-900">Fare:</strong>
+						৳ {{ ride.fare }}
+					</p>
+					<p class="text-gray-600">
+						<strong class="text-gray-900">Start Time:</strong>
+						{{ formatDateTime(ride.startTime) }}
+					</p>
+					<p class="text-gray-600">
+						<strong class="text-gray-900">End Time:</strong>
+						{{ formatDateTime(ride.endTime) }}
+					</p>
+					<p class="text-gray-600">
+						<strong class="text-gray-900">Distance:</strong>
+						{{ ride.distance }} km
+					</p>
+					<p class="text-gray-600">
+						<strong class="text-gray-900">Duration:</strong>
+						{{ ride.duration }}
+					</p>
+				</div>
+
+				<div class="border-t border-gray-300"></div>
+			</div>
 		</div>
 	</div>
 </div>
+<ng-template #noHistory>
+	<div
+		style="
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: calc(100vh - 120px);
+		"
+	>
+		<div class="text-center py-4">
+			<p class="text-gray-600" style="font-weight: bold">
+				No Ride History Found
+			</p>
+			<iframe
+				src="https://lottie.host/?file=2f91d71d-8d90-47ae-b457-34fbd68d9a14/vOL4VKU1ru.lottie"
+				style="display: block; margin: 0 auto"
+			></iframe>
+		</div>
+	</div>
+</ng-template>

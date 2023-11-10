@@ -1,5 +1,5 @@
 <div
-	class="flex items-center justify-center min-h-screen bg-white px-4 sm:px-6 lg:px-8"
+	class="flex items-center justify-center min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8"
 >
 	<div class="flex flex-col items-center p-6 w-full max-w-2xl">
 		<h1 class="text-4xl font-bold mb-6 text-gray-700">Ride Summary</h1>
@@ -10,44 +10,80 @@
 					<div class="flex items-center">
 						<mat-icon class="text-gray-500">local_taxi</mat-icon>
 						<span class="ml-2 font-semibold text-gray-700">Fare:</span>
+						<span class="ml-2 font-semibold text-gray-700">৳{{ fare }}</span>
 					</div>
-					<span class="font-semibold text-gray-700">{{ fare }}</span>
 				</mat-list-item>
 				<mat-list-item class="flex justify-between mb-4">
 					<div class="flex items-center">
 						<mat-icon class="text-gray-500">timer</mat-icon>
 						<span class="ml-2 font-semibold text-gray-700">Duration:</span>
+						<span class="ml-2 font-semibold text-gray-700">{{ duration }}</span>
 					</div>
-					<span class="font-semibold text-gray-700">{{ duration }}</span>
 				</mat-list-item>
 				<mat-list-item class="flex justify-between mb-4">
 					<div class="flex items-center">
 						<mat-icon class="text-gray-500">schedule</mat-icon>
 						<span class="ml-2 font-semibold text-gray-700">Start Time:</span>
+						<span class="ml-2 font-semibold text-gray-700">
+							{{ startTime }}
+						</span>
 					</div>
-					<span class="font-semibold text-gray-700">{{ startTime }}</span>
 				</mat-list-item>
 				<mat-list-item class="flex justify-between mb-4">
 					<div class="flex items-center">
 						<mat-icon class="text-gray-500">schedule</mat-icon>
 						<span class="ml-2 font-semibold text-gray-700">End Time:</span>
+						<span class="ml-2 font-semibold text-gray-700">{{ endTime }}</span>
 					</div>
-					<span class="font-semibold text-gray-700">{{ endTime }}</span>
+				</mat-list-item>
+				<mat-list-item class="flex justify-between mb-4">
+					<div class="flex items-center">
+						<mat-icon class="text-gray-500">timer</mat-icon>
+						<span class="ml-2 font-semibold text-gray-700">Duration:</span>
+						<span class="ml-2 font-semibold text-gray-700">{{ duration }}</span>
+					</div>
 				</mat-list-item>
 				<mat-list-item class="flex justify-between mb-4">
 					<div class="flex items-center">
 						<mat-icon class="text-gray-500">map</mat-icon>
 						<span class="ml-2 font-semibold text-gray-700">Distance:</span>
+						<span class="ml-2 font-semibold text-gray-700">
+							{{ distance }} km
+						</span>
 					</div>
-					<span class="font-semibold text-gray-700">{{ distance }}</span>
 				</mat-list-item>
 			</mat-list>
 		</mat-card-content>
 
+		<img *ngIf="image" [src]="image" alt="Taken image" />
+
 		<mat-card-actions class="w-full flex justify-center">
-			<button mat-raised-button color="primary" class="mt-4">
+			<button
+				mat-raised-button
+				color="secondary"
+				class="mt-4"
+				(click)="takePicture()"
+			>
+				<mat-icon>camera</mat-icon>
+				Take Picture
+			</button>
+		</mat-card-actions>
+		<div
+			class="mb-2 text-center highlight-text flex items-center justify-center text-red-500"
+		>
+			<mat-icon class="highlight-icon">error_outline</mat-icon>
+			<span>Take a Picture of the Vehicle to Activate Payment</span>
+		</div>
+		<mat-card-actions class="w-full flex justify-center">
+			<button
+				mat-raised-button
+				color="primary"
+				class="mt-4"
+				(click)="initiateStripePayment(email, fare)"
+				[disabled]="!isImageTaken"
+			>
 				<mat-icon>payment</mat-icon>
-				Payment
+				Pay with Stripe
 			</button>
 		</mat-card-actions>
 	</div>

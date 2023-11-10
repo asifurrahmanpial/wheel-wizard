@@ -1,32 +1,53 @@
 <div
 	class="flex items-center justify-center min-h-screen bg-white px-4 sm:px-6 lg:px-8"
 >
-	<div class="flex flex-col items-center p-6 w-full max-w-2xl">
+	<div class="flex flex-col items-center w-full max-w-2xl text-center">
 		<h1 class="text-4xl font-bold mb-6 text-gray-700">Profile</h1>
-		<p class="text-xl font-semibold text-gray-700">name</p>
-		<p class="text-xl font-semibold text-gray-700">email</p>
+		<iframe
+			src="https://lottie.host/?file=1e3cfbca-f3b0-4ef4-b9da-a27baa2a86be/Ut2xdOdiHs.lottie"
+		></iframe>
+		<p class="text-xl font-semibold text-gray-700">{{ profile?.username }}</p>
+		<p class="text-xl font-semibold text-gray-700">{{ profile?.userEmail }}</p>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 w-full">
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 w-full">
-				<mat-card class="flex-1 flex flex-col items-center p-4 md:w-full">
+			<div class="grid grid-cols-2 gap-4 mt-6 w-full">
+				<mat-card
+					class="flex-1 flex flex-col items-center p-4 md:w-full text-center"
+				>
 					<mat-icon class="text-gray-500">local_taxi</mat-icon>
 					<span class="mt-2 font-semibold text-gray-700">Total Trips</span>
-					<span class="mt-2 font-semibold text-gray-700">totalTrips</span>
+					<span class="mt-2 font-semibold text-gray-700">
+						{{ profile?.totalTrips ?? 0 }}
+					</span>
 				</mat-card>
-				<mat-card class="flex-1 flex flex-col items-center p-4 md:w-full">
+				<mat-card
+					class="flex-1 flex flex-col items-center p-4 md:w-full text-center"
+				>
 					<mat-icon class="text-gray-500">attach_money</mat-icon>
 					<span class="mt-2 font-semibold text-gray-700">Total Fare</span>
-					<span class="mt-2 font-semibold text-gray-700">totalFare</span>
+					<span class="mt-2 font-semibold text-gray-700">
+						৳ {{ profile?.totalFare ?? 0 }}
+					</span>
 				</mat-card>
-				<mat-card class="flex-1 flex flex-col items-center p-4 md:w-full">
+			</div>
+			<div class="grid grid-cols-2 gap-4 mt-6 w-full">
+				<mat-card
+					class="flex-1 flex flex-col items-center p-4 md:w-full text-center"
+				>
 					<mat-icon class="text-gray-500">timer</mat-icon>
 					<span class="mt-2 font-semibold text-gray-700">Total Duration</span>
-					<span class="mt-2 font-semibold text-gray-700">totalDuration</span>
+					<span class="mt-2 font-semibold text-gray-700">
+						{{ calculateDuration(profile?.totalDuration) }}
+					</span>
 				</mat-card>
-				<mat-card class="flex-1 flex flex-col items-center p-4 md:w-full">
+				<mat-card
+					class="flex-1 flex flex-col items-center p-4 md:w-full text-center"
+				>
 					<mat-icon class="text-gray-500">map</mat-icon>
 					<span class="mt-2 font-semibold text-gray-700">Total Distance</span>
-					<span class="mt-2 font-semibold text-gray-700">totalDistance</span>
+					<span class="mt-2 font-semibold text-gray-700">
+						{{ profile?.totalDistance ?? 0 }} km
+					</span>
 				</mat-card>
 			</div>
 		</div>

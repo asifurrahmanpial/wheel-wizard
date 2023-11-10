@@ -42,6 +42,12 @@ export class Ride extends Document {
 	fare: number;
 
 	@Prop({
+		type: Number,
+		required: true
+	})
+	duration: number;
+
+	@Prop({
 		type: Date,
 		required: true
 	})
@@ -52,6 +58,12 @@ export class Ride extends Document {
 		required: true
 	})
 	endTime: Date;
+
+	@Prop({
+		type: Number,
+		required: true
+	})
+	distance: number;
 
 	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
 	bookedBy: mongoose.Types.ObjectId;

@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { VehicleService } from './vehicles.service';
+import { Body, Controller, Get, Post, Put, Param } from '@nestjs/common';
 import { Vehicle } from './vehicles.schema';
+import { VehicleService } from './vehicles.service';
 
 @Controller('vehicles')
 export class VehicleController {
@@ -14,5 +14,14 @@ export class VehicleController {
 	@Post()
 	async createVehicle(@Body() vehicleData: Vehicle): Promise<Vehicle> {
 		return this.vehicleService.createVehicle(vehicleData);
+	}
+
+	// vehicles.controller.ts
+	@Put(':id')
+	async updateVehicle(
+		@Param('id') id: string,
+		@Body() vehicleData: Partial<Vehicle>
+	): Promise<Vehicle> {
+		return this.vehicleService.updateVehicle(id, vehicleData);
 	}
 }

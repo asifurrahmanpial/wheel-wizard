@@ -49,4 +49,20 @@ export class BookRideComponent implements OnInit {
 			}
 		});
 	}
+
+	getBaseFare() {
+		if (this.vehicleData && this.vehicleData.vehicleType) {
+			const vehicleType = this.vehicleData.vehicleType.toLowerCase();
+
+			switch (vehicleType) {
+				case 'scooter':
+					return 50;
+				case 'cycle':
+					return 20;
+				default:
+					throw new Error('Invalid vehicle type');
+			}
+		}
+		return 0;
+	}
 }

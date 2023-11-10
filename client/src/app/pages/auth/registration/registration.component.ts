@@ -70,20 +70,23 @@ export class RegistrationComponent {
 			(response) => {
 				this.router.navigate(['/login']);
 				this.snackBar.open('Registered in successfully', 'Close', {
-					duration: 2000
+					duration: 2000,
+					verticalPosition: 'top'
 				});
 			},
 			(error) => {
-				if (error.status === 200) {
+				if (error.status === 201) {
 					this.snackBar.open('User already exists', 'Close', {
-						duration: 2000
+						duration: 2000,
+						verticalPosition: 'top'
 					});
 				} else {
 					this.snackBar.open(
 						'An error occurred. Please try again later.',
 						'Close',
 						{
-							duration: 2000
+							duration: 2000,
+							verticalPosition: 'top'
 						}
 					);
 				}
