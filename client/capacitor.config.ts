@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
 	// 	cleartext: true,
 	// 	androidScheme: 'https'
 	// }
-	appId: 'com.example.app',
+	appId: 'wheel-wizard-api.cyclic.app',
 	appName: 'Wheel Wizard',
 	webDir: 'www',
 	bundledWebRuntime: false
