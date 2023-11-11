@@ -22,7 +22,7 @@ export const USER_STORAGE_KEY = 'APP_TOKEN';
 	providedIn: 'root'
 })
 export class AuthService {
-	private baseUrl = 'http://192.168.68.86:3000/';
+	private baseUrl = 'https://wheel-wizard-production.up.railway.app/';
 	private user: BehaviorSubject<UserData | null | undefined> =
 		new BehaviorSubject<UserData | null | undefined>(undefined);
 

@@ -1,5 +1,4 @@
 # Ignore Angular generated files
-/dist/
 /tmp/
 /out-tsc/
 /bazel-out/
