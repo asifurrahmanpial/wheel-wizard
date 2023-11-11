@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -30,6 +30,7 @@
     "bcrypt": "^5.1.1",
     "class-validator": "^0.14.0",
     "cors": "^2.8.5",
+    "mongodb": "^6.2.0",
     "mongoose": "^7.6.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",

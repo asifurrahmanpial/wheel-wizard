@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
@@ -22,7 +22,7 @@ export const USER_STORAGE_KEY = 'APP_TOKEN';
 	providedIn: 'root'
 })
 export class AuthService {
-	private baseUrl = 'http://192.168.0.120:4000/';
+	private baseUrl = 'https://wheel-wizard-api.cyclic.app/';
 	private user: BehaviorSubject<UserData | null | undefined> =
 		new BehaviorSubject<UserData | null | undefined>(undefined);
 
