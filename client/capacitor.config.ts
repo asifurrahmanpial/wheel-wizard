@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
 	appName: 'Wheel Wizard',
 	webDir: 'www',
 	server: {
-		url: 'http://192.168.0.120:4200',
+		url: 'http://192.168.68.86:4200',
 		cleartext: true,
 		androidScheme: 'https'
 	}
