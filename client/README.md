@@ -1,35 +1,4 @@
-# Client
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.4.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
-
-Certainly! Based on the information you've provided, here's how you can highlight the project in your resume:
-
-### Project: Micromobility App
+### Project: Wheel Wizard (Frontend)
 #### Technologies Used:
 - **Frontend:**
   - Tailwind CSS
@@ -37,47 +6,38 @@ Certainly! Based on the information you've provided, here's how you can highligh
   - Capacitor
   - Ionic
   - Mapbox
+  - Angular Material
   
-- **Backend:**
-  - NestJS
-  - MongoDB
-  
-- **Payment Integration:**
-  - Stripe
-
 #### Project Overview:
-Developed a micromobility application that revolutionizes urban commuting. The app allows users to conveniently access and utilize available vehicles within their vicinity, offering a seamless and pay-per-use experience.
+Developed the frontend for a micromobility application, transforming urban commuting experiences. The frontend design focused on creating an intuitive and visually appealing user interface, seamlessly integrating with the backend for a cohesive user experience.
 
-#### Key Features:
+#### Key Frontend Contributions:
 
-1. **Real-time Vehicle Availability:**
-   - Implemented a dynamic system displaying vehicles within a 1km radius of the user.
-   - Utilized Angular and Tailwind CSS for an intuitive and responsive user interface.
+1. **Responsive UI Design:**
+   - Leveraged Angular and Tailwind CSS to design a responsive and user-friendly interface.
+   - Ensured optimal user experience across various devices and screen sizes.
 
-2. **QR Code Scanning:**
-   - Integrated a QR code scanning feature to provide users with detailed information about the selected vehicle and initiate rides.
+2. **Interactive Map Integration:**
+   - Integrated Mapbox to provide users with real-time information on vehicle locations and service zones.
+   - Implemented interactive map features for an engaging user experience.
 
-3. **Real-time Updates:**
-   - Enabled real-time updates for distance, fare, time, and map location during the ride, enhancing user transparency and experience.
+3. **QR Code Scanning Interface:**
+   - Developed a smooth QR code scanning interface using Ionic and Capacitor, enhancing the user journey from booking to riding.
 
-4. **Service Zones:**
-   - Defined service zones to ensure users end their journeys within designated areas.
-   - Implemented restrictions preventing ride conclusion outside the specified service zones.
+4. **Real-time Updates Dashboard:**
+   - Implemented a dynamic dashboard displaying real-time updates on distance, fare, time, and the live path of the ongoing ride.
 
-5. **Post-Ride Verification:**
-   - Introduced a post-ride verification process, requiring users to capture a picture of the vehicle to activate the payment process.
+5. **Service Zone Visualizations:**
+   - Designed visual representations of service zones, ensuring users have clear indications of where they can start and end their rides.
 
-6. **Secure In-App Payments:**
-   - Integrated Stripe as the primary payment method, allowing users to seamlessly and securely make payments within the app.
+6. **Post-Ride Verification Flow:**
+   - Created an intuitive post-ride verification flow, guiding users to capture a picture of the vehicle for secure and efficient payment processing.
 
 #### Achievements:
-- Successfully implemented and optimized the frontend using Angular, Ionic, and Tailwind CSS, resulting in an intuitive and user-friendly interface.
-- Designed and implemented a robust backend using NestJS and MongoDB to handle real-time updates and secure user data.
-- Enhanced user security and experience by integrating Stripe for in-app payments.
+- Successfully implemented a visually appealing and responsive UI, enhancing the overall user experience.
+- Created an engaging map interface using Mapbox for real-time updates.
 
 #### Learnings:
-- Gained extensive experience in frontend technologies like Angular and Ionic.
-- Developed proficiency in backend development using NestJS and MongoDB.
-- Successfully integrated and configured payment gateways, specifically Stripe, for secure financial transactions within the app.
-
-This project not only showcases technical skills in various technologies but also highlights your ability to create a user-focused, secure, and efficient micromobility solution.
+- Strengthened proficiency in frontend technologies, mastering Angular, Ionic, and Tailwind CSS for creating responsive and visually appealing user interfaces.
+- Gained hands-on experience in seamlessly integrating external services like Mapbox, enhancing the app's functionality and providing users with real-time location-based information.
+- Understood the importance of always storing API keys in the backend to prevent exposure and unauthorized access. This approach ensures a more secure and robust implementation, protecting sensitive information from potential threats and vulnerabilities. (Yet to implement)
