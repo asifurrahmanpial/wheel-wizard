@@ -1,3 +1,5 @@
+# BACKEND HOSTING IS DISABLED, USERS WON'T BE ABLE TO LOGIN
+
 # Wheel-Wizard
 
 Wheel-Wizard is a micro-mobility app designed to make your transportation experience easy and sustainable. Discover available scooters and bicycles around you, ride with convenience, and pay as you go. The app is built using a powerful stack of technologies and services, including Angular, Ionic, Capacitor, Tailwind CSS, Angular Material, NestJS, MongoDB, Mapbox, and Stripe.
