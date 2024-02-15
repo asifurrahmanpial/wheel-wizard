@@ -36,7 +36,7 @@
     "@capacitor/ios": "^5.5.0",
     "@capacitor/preferences": "^5.0.6",
     "@capawesome/capacitor-file-picker": "^5.1.1",
-    "@ionic/angular": "^7.5.1",
+    "@ionic/angular": "^7.6.6",
     "@ionic/pwa-elements": "^3.2.2",
     "@ionic/storage-angular": "^4.0.0",
     "@mapbox/mapbox-gl-supported": "^2.0.1",
