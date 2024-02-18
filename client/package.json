@@ -25,7 +25,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
-    "@capacitor-community/stripe": "^5.3.0",
+    "@capacitor-community/stripe": "^5.4.2",
     "@capacitor-mlkit/barcode-scanning": "^5.3.0",
     "@capacitor/android": "^5.6.0",
     "@capacitor/angular": "^2.0.3",
