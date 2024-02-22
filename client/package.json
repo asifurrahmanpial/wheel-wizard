@@ -31,7 +31,7 @@
     "@capacitor/angular": "^2.0.3",
     "@capacitor/camera": "^5.0.8",
     "@capacitor/core": "^5.5.1",
-    "@capacitor/device": "^5.0.6",
+    "@capacitor/device": "^5.0.7",
     "@capacitor/geolocation": "^5.0.6",
     "@capacitor/ios": "^5.6.0",
     "@capacitor/preferences": "^5.0.6",
